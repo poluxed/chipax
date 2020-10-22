@@ -24,8 +24,29 @@ export class EpisodesService {
         });
     }
 
-    private getEpisodesFiltered(filterName: string, page: number) : Promise<any>{
+    public getAllEpisodes() : Promise<any> {
+        return new Promise((resolve) => {
+            resolve(
+                this.getEpisodes(1).then(primerResultado => {
+                    var paginas = primerResultado.info.pages;
+                    let promesas : Array<Promise<any>> = [];
+                    for (let i=1; i<=paginas; i++) {
+                        promesas.push(this.getEpisodes(i));
+                    }
+                    return Promise.all(promesas);
+                })
+            );
+        });
+    }
+
+    private getEpisodes(page: number) : Promise<any> {
+        let url = this._apiLocation + "?page=" + page;
+        return this.http.get(url).toPromise();
+    }
+
+    private getEpisodesFiltered(filterName: string, page: number) : Promise<any> {
         let url = this._apiLocation + "?name=" + filterName + "&page=" + page;
         return this.http.get(url).toPromise();
     }
+
 }
