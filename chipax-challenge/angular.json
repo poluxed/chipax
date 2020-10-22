@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "chipax-challenge"
+    }
+  },
+  "defaultProject": "chipax-challenge",
+  "cli": {
+    "analytics": false
+  }
 }
